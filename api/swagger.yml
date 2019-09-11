@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+  title: DoH FIUBA
+  description: Some desc.
+
+servers:
+  - url: http://localhost:8081/api
+
+paths:
+  /domains/{domain}:
+    get:
+      description: "Obtiene la IP asociada a un dominio en particular"
+      operationId: "api.domains.obtener_ip_nombre_dom"
+      tags:
+        - "Domains"
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Domain"
+        404:
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /custom-domain:
+    get:
+      description: "Obtiene todas los dominios existentes en el sistema."
+      operationId: "api.domains.obtener_dom_query"
+      parameters:
+        - name: q
+          description: "Filtro para obtener todos los dominios que contengan el string 'q'"
+          in: query
+          required: false
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Domain"
+    post:
+      description: "Crea una entrada para sobreescribir la IP de un dominio en particular."
+      operationId: "api.domains.crear_dom"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewDomain"
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Domain"
+        404:
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: "custom domain already exists"
+  /custom-domain/{domain}:
+    put:
+      description: "Edita un dominio ya existente en el sistema"
+      operationId: "api.domains.editar_dom"
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewDomain"
+            example:
+              domain: "custom.fi.uba.ar"
+              ip: "2.2.2.2"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Domain"
+              example:
+                domain: "custom.fi.uba.ar"
+                ip: "2.2.2.2"
+                custom: true
+        400:
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                error: "payload is invalid"
+        404:
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      description: "Borra un dominio existente en el sistema."
+      operationId: "api.domains.borrar_dom"
+      parameters:
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteDomain"
+
+        404:
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Domain:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+          description: "Domain name."
+        ip:
+          type: "string"
+        custom:
+          type: "boolean"
+          description: "true if domain is custom."
+      example:
+        domain: "fi.uba.ar"
+        ip: "157.92.49.38"
+        custom: false
+
+    NewDomain:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+          description: "Domain name."
+        ip:
+          type: "string"
+      example:
+        domain: "custom.fi.uba.ar"
+        ip: "1.1.1.1"
+
+    DeleteDomain:
+      type: "object"
+      properties:
+        domain:
+          type: "string"
+          description: "Domain name."
+      example:
+        domain: "custom.fi.uba.ar"
+    Error:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+          description: "Error message."
+      example:
+        error: "domain not found"
