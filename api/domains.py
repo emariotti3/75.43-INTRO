@@ -7,6 +7,9 @@ domain = {
     'custom': 'false'
 }
 
+custom_domains = {}
+
+
 def obtener_ip_nombre_dom(nombre_dominio):
     return domain
 

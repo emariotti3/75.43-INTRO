@@ -37,6 +37,8 @@ paths:
     get:
       description: "Obtiene todas los dominios existentes en el sistema."
       operationId: "api.domains.obtener_dom_query"
+      tags:
+        - "Domains"
       parameters:
         - name: q
           description: "Filtro para obtener todos los dominios que contengan el string 'q'"
@@ -56,6 +58,8 @@ paths:
     post:
       description: "Crea una entrada para sobreescribir la IP de un dominio en particular."
       operationId: "api.domains.crear_dom"
+      tags:
+        - "Domains"
       requestBody:
         content:
           application/json:
@@ -80,6 +84,8 @@ paths:
     put:
       description: "Edita un dominio ya existente en el sistema"
       operationId: "api.domains.editar_dom"
+      tags:
+        - "Domains"
       parameters:
         - name: domain
           in: path
@@ -123,6 +129,8 @@ paths:
     delete:
       description: "Borra un dominio existente en el sistema."
       operationId: "api.domains.borrar_dom"
+      tags:
+        - "Domains"
       parameters:
         - name: domain
           in: path
