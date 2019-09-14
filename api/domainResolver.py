@@ -1,4 +1,4 @@
 import dns.resolver
 
-def resolve(query):
+def resolver(query):
 	return dns.resolver.query(query)
