@@ -5,13 +5,13 @@ info:
   description: Some desc.
 
 servers:
-  - url: http://localhost:8081/api
+  - url: http://localhost:8080/api
 
 paths:
   /domains/{domain}:
     get:
       description: "Obtiene la IP asociada a un dominio en particular"
-      operationId: "api.domains.obtener_ip_nombre_dom"
+      operationId: "api.domains.obtener_dominio"
       tags:
         - "Domains"
       parameters:
@@ -22,7 +22,7 @@ paths:
             type: "string"
       responses:
         200:
-          description: "OK"
+          description: "Ok"
           content:
             application/json:
               schema:
@@ -33,10 +33,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /custom-domain:
+  /custom-domains:
     get:
       description: "Obtiene todas los dominios existentes en el sistema."
-      operationId: "api.domains.obtener_dom_query"
+      operationId: "api.domains.obtener_dominios"
       tags:
         - "Domains"
       parameters:
@@ -48,7 +48,7 @@ paths:
             type: "string"
       responses:
         200:
-          description: "OK"
+          description: "Ok"
           content:
             application/json:
               schema:
@@ -57,7 +57,7 @@ paths:
                   $ref: "#/components/schemas/Domain"
     post:
       description: "Crea una entrada para sobreescribir la IP de un dominio en particular."
-      operationId: "api.domains.crear_dom"
+      operationId: "api.domains.crear_dominio"
       tags:
         - "Domains"
       requestBody:
@@ -72,7 +72,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Domain"
-        404:
+        400:
           description: "Bad Request"
           content:
             application/json:
@@ -80,10 +80,10 @@ paths:
                 $ref: "#/components/schemas/Error"
               example:
                 error: "custom domain already exists"
-  /custom-domain/{domain}:
+  /custom-domains/{domain}:
     put:
       description: "Edita un dominio ya existente en el sistema"
-      operationId: "api.domains.editar_dom"
+      operationId: "api.domains.editar_dominio"
       tags:
         - "Domains"
       parameters:
@@ -102,7 +102,7 @@ paths:
               ip: "2.2.2.2"
       responses:
         200:
-          description: "OK"
+          description: "Ok"
           content:
             application/json:
               schema:
@@ -128,7 +128,7 @@ paths:
 
     delete:
       description: "Borra un dominio existente en el sistema."
-      operationId: "api.domains.borrar_dom"
+      operationId: "api.domains.borrar_dominio"
       tags:
         - "Domains"
       parameters:
@@ -139,7 +139,7 @@ paths:
             type: "string"
       responses:
         200:
-          description: "OK"
+          description: "Ok"
           content:
             application/json:
               schema:
