@@ -79,7 +79,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                error: "custom domain already exists"
+                detail: "custom domain already exists"
+                status: 400
+                title: "Bad Request"
+                type: "about:blank"
   /custom-domains/{domain}:
     put:
       description: "Edita un dominio ya existente en el sistema"
@@ -118,7 +121,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                error: "payload is invalid"
+                detail: "invalid domain"
+                status: 400
+                title: "Bad Request"
+                type: "about:blank"
         404:
           description: "Not Found"
           content:
@@ -193,8 +199,20 @@ components:
     Error:
       type: "object"
       properties:
-        error:
+        detail:
           type: "string"
           description: "Error message."
+        status:
+          type: "integer"
+          description: "Status code."
+        title:
+          type: "string"
+          description: "Error name."
+        type:
+          type: "string"
+          description: "Error type."  
       example:
-        error: "domain not found"
+        detail: "domain not found"
+        status: 404
+        title: "Not Found"
+        type: "about:blank"

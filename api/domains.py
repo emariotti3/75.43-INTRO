@@ -5,27 +5,31 @@ HTTP_CREATED = 201
 HTTP_BAD_REQUEST = 400
 HTTP_NOT_FOUND = 404
 
-# Data to serve with our API
-dominios = {
-    'domain': 'fi.uba.ar',
-    'ip': '157.92.49.38',
-    'custom': 'false'
-}
-
-dominios = {}
+dominios_guardados = {}
 
 dominios_custom = {}
 
 def obtener_dominio(domain):
+    """
+    Esta funcion maneja el request GET /api/domains/{domain}
+
+    :return:      200 con la direccion del dominio pedido, 404 not found
+    """
     if domain in dominios_custom:
         return dominios_custom[domain]
-    if domain not in dominios:
-        addresses = dr.resolver(domain)
-        dominios[domain] = [0, [x.address for x in addresses]]
-    dominio = dominios[domain]
+    if domain not in dominios_guardados:
+        try:
+            addresses = dr.resolver(domain)
+        except:
+            return abort(HTTP_NOT_FOUND, 'domain not found')
+        dominios_guardados[domain] = [0, [x.address for x in addresses]]
+    dominio = dominios_guardados[domain]
     direccion = dominio[1][dominio[0]]
     dominio[0] = (dominio[0] + 1) % len(dominio[1])
-    return direccion
+    return _crear_response_dominio(domain, direccion, False)
+
+def _crear_response_dominio(dominio, ip, es_dominio_custom):
+    return {'domain': dominio, 'ip': ip, 'custom': es_dominio_custom}
 
 def obtener_dominios(q = None):
     """
