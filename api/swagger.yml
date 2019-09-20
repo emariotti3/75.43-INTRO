@@ -1,8 +1,10 @@
 openapi: 3.0.0
 info:
   version: "1.0.0"
-  title: DoH FIUBA
-  description: Some desc.
+  title: Simplified DoH
+  description: |
+    Definición de la API que constituye un servicio para el manejo de dominios. Permite obtener la dirección IP de un
+    dominio en particular y facilita la gestión de custom domains.
 
 servers:
   - url: http://localhost:8080/api
@@ -121,7 +123,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
-                detail: "invalid domain"
+                detail: "payload is invalid"
                 status: 400
                 title: "Bad Request"
                 type: "about:blank"
