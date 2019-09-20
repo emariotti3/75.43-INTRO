@@ -102,5 +102,5 @@ def borrar_dominio(domain):
     :return:        200 dominio, 404 not found
     """
     if dominios_custom.pop(domain, None):
-        return {'dominio': domain}
+        return {'domain': domain}
     return abort(HTTP_NOT_FOUND, 'domain not found')
