@@ -4,6 +4,8 @@ import api.domainResolver as dr
 HTTP_CREATED = 201
 HTTP_BAD_REQUEST = 400
 HTTP_NOT_FOUND = 404
+IP_MAX_VALUE = 255
+IP_MIN_VALUE = 0
 
 dominios_guardados = {}
 
@@ -41,8 +43,17 @@ def obtener_dominios(q = None):
     return {'items': list(filter(lambda dominio: q in dominio.get('domain'), dominios)) if q else dominios}
 
 def _validar_parametros(dominio, ip):
-    if not dominio or not ip:
+    if not dominio or not ip or not _ip_valida(ip):
         return abort(HTTP_BAD_REQUEST, 'payload is invalid')
+
+def _ip_valida(ip):
+    rangos_ip = ip.split(".")
+    if len(rangos_ip) != 4:
+        return False
+    for valor in rangos_ip:
+        if not valor.isdigit() or (int(valor) > IP_MAX_VALUE or int(valor) < IP_MIN_VALUE):
+            return False
+    return True
 
 def crear_dominio(**kwargs):
     """
@@ -77,7 +88,7 @@ def editar_dominio(domain, **kwargs):
     if domain not in dominios_custom.keys():
         return abort(HTTP_NOT_FOUND, 'domain not found')
     if domain != dominio:
-        return abort(HTTP_BAD_REQUEST, 'invalid domain')
+        return abort(HTTP_BAD_REQUEST, 'payload is invalid')
 
     dominio_custom['custom'] = True
     dominios_custom[domain] = dominio_custom
